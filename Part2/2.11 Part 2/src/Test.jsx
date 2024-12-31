@@ -2,18 +2,6 @@
 import { useState } from 'react'
 import Names from "./components/Names"
 
-/* const Name=({person})=>{
-  return<div>{person.name} {person.number}</div>
-  
-} */
-
-  const persons = [
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ];
-
 const Filter=({searchPerson, handleSearchPerson})=>{
   return(
     <div>
@@ -53,7 +41,7 @@ const Persons = ({filtedPerson})=>{
 } 
 
 
-const App = (props) => {
+const Test = (props) => {
   const [persons, setPersons] = useState(props.persons) 
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
@@ -117,4 +105,4 @@ const App = (props) => {
   )
 }
 
-export default App
+export default Test

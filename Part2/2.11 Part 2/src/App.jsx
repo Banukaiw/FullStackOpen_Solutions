@@ -1,6 +1,7 @@
 // separate each componenet
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Names from "./components/Names"
+import axios from 'axios';
 
 /* const Name=({person})=>{
   return<div>{person.name} {person.number}</div>
@@ -53,12 +54,17 @@ const Persons = ({filtedPerson})=>{
 } 
 
 
-const App = (props) => {
-  const [persons, setPersons] = useState(props.persons) 
+const App = () => {
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [searchPerson, setSetSearchPersone] = useState("")  // State to hold input value
-  const [filtedPerson,setFilteredPersons] = useState(props.persons)
+  const [filtedPerson,setFilteredPersons] = useState([])
+
+  useEffect(()=>{
+    console.log("effecr")
+    axios.get()
+  })
 
   const addName = (event)=>{
     event.preventDefault()
