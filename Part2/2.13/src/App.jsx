@@ -1,21 +1,20 @@
-//after adding the data it will store in json file
+//get the API to new module
 
-// separate each componenet
 import { useEffect, useState } from 'react'
 import Names from "./components/Names"
-import axios from 'axios';
-
+//import axios from 'axios';
+import name from './service/name';
 /* const Name=({person})=>{
   return<div>{person.name} {person.number}</div>
   
 } */
 
-  const persons = [
+/*   const persons = [
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
     { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
     { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ];
+  ]; */
 
 const Filter=({searchPerson, handleSearchPerson})=>{
   return(
@@ -63,12 +62,14 @@ const App = () => {
   const [searchPerson, setSetSearchPersone] = useState("")  // State to hold input value
   const [filtedPerson,setFilteredPersons] = useState([])
 
+
+  //newly added
   useEffect(()=>{
     console.log("effecr")
-    axios.get("http://localhost:3001/persons").then((response)=>{
+    name.getALL().then((initialPerson)=>{
       console.log("promise fulfilled!")
-      setPersons(response.data);
-      setFilteredPersons(response.data)
+      setPersons(initialPerson);
+      setFilteredPersons(initialPerson)
     })
     .catch((error)=>{
       console.error("Error fetching data:",error)
@@ -96,10 +97,10 @@ const App = () => {
     }
 
     //newly added
-    axios.post("http://localhost:3001/persons",nemeObject).then((response)=>{
-    console.log(response)
-    setPersons(persons.concat(response.data))
-    setFilteredPersons(filtedPerson.concat(response.data))
+    name.Create(nemeObject).then((returnPersons)=>{
+    console.log(returnPersons)
+    setPersons(persons.concat(returnPersons))
+    setFilteredPersons(filtedPerson.concat(returnPersons))
     setNewName("")
     setNewNumber("") 
     })

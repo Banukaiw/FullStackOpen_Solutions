@@ -1,21 +1,9 @@
-//after adding the data it will store in json file
+//delect the data from backend
 
-// separate each componenet
 import { useEffect, useState } from 'react'
 import Names from "./components/Names"
-import axios from 'axios';
+import name from './service/name';
 
-/* const Name=({person})=>{
-  return<div>{person.name} {person.number}</div>
-  
-} */
-
-  const persons = [
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ];
 
 const Filter=({searchPerson, handleSearchPerson})=>{
   return(
@@ -45,11 +33,11 @@ const PersonForm=({addName, newName,handleNameChange, newNumber,handleNumberChan
   )
 }
 
-const Persons = ({filtedPerson})=>{
+const Persons = ({filtedPerson,deleteName})=>{
   return(
     <div>
       {filtedPerson.map((person)=>{
-      return <Names key={person.id} person={person}/>
+      return <Names key={person.id} person={person} deleteName={deleteName}/>
      })}
     </div> 
   )
@@ -63,12 +51,13 @@ const App = () => {
   const [searchPerson, setSetSearchPersone] = useState("")  // State to hold input value
   const [filtedPerson,setFilteredPersons] = useState([])
 
+
   useEffect(()=>{
-    console.log("effecr")
-    axios.get("http://localhost:3001/persons").then((response)=>{
+    console.log("effect")
+    name.getALL().then((initialPerson)=>{
       console.log("promise fulfilled!")
-      setPersons(response.data);
-      setFilteredPersons(response.data)
+      setPersons(initialPerson);
+      setFilteredPersons(initialPerson)
     })
     .catch((error)=>{
       console.error("Error fetching data:",error)
@@ -95,17 +84,30 @@ const App = () => {
       number: newNumber,
     }
 
-    //newly added
-    axios.post("http://localhost:3001/persons",nemeObject).then((response)=>{
-    console.log(response)
-    setPersons(persons.concat(response.data))
-    setFilteredPersons(filtedPerson.concat(response.data))
-    setNewName("")
+    
+    name.Create(nemeObject).then((returnPersons)=>{
+    console.log(returnPersons)
+    setPersons(persons.concat(returnPersons))
+    setFilteredPersons(filtedPerson.concat(returnPersons))
+    setNewName("")   
     setNewNumber("") 
     })
 
-    
   }
+
+  //newly added
+  const deleteName = (id) =>{
+    name
+    .remove(id)
+    .then(() => {
+      setPersons(persons.filter((persons)=>persons.id !== id))
+      setFilteredPersons(filtedPerson.filter((persons)=>persons.id !== id))
+    }).catch((error)=>{
+      console.log("error deleting persons", error.massage)
+      alert("error deleting person")
+    })
+  } 
+
 
   const handleNameChange=(event)=>{
     console.log(event.target.value)
@@ -133,7 +135,7 @@ const App = () => {
       
       
       <h2>Members</h2>
-      <Persons filtedPerson={filtedPerson}/>
+      <Persons filtedPerson={filtedPerson} deleteName={deleteName}/>
       
 
     </div>
